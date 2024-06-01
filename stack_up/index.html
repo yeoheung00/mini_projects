@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="kr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stack UP!</title>
+  <style>
+    #container {
+      width: 500px;
+      height: 800px;
+      overflow: hidden;
+      position: relative;
+      background-color: gray;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    #score {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: fit-content;
+      text-align: center;
+    }
+
+    #display {
+      position: absolute;
+      top: 70%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: x-large;
+      font-weight: bold;
+      width: 100%;
+      height: fit-content;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <canvas id="play_canvas" width="500px" height="800px"></canvas>
+    <canvas id="stack_canvas" width="500px" height="800px"></canvas>
+    <h1 id="score"></h1>
+    <p id="display">Press the "space" to start</p>
+  </div>
+  <script>
+    class Stack {
+      position = null;
+      length = null;
+      floor = null;
+      constructor(position, length, floor) {
+        this.position = position;
+        this.length = length;
+        this.floor = floor;
+      }
+    }
+    var stacks = [new Stack(125, 250, 1)];
+    var current = {
+      position: 0,
+      length: 250
+    }
+    var isRunning = false;
+    var isPressed = false;
+    var play_canvas = document.getElementById("play_canvas");
+    var play_ctx = play_canvas.getContext("2d");
+    var stack_canvas = document.getElementById("stack_canvas");
+    var stack_ctx = stack_canvas.getContext("2d");
+    const palette = ["#A4036F", "#048BA8", "#16DB93", "#EFEA5A", "#F29E4C"];
+
+    var score = document.getElementById("score");
+    var display = document.getElementById("display");
+
+    window.addEventListener("keydown", (e) => {
+      if (e.keyCode === 32) {
+        if (isRunning) {
+          if (!isPressed) {
+            isPressed = true;
+            if (stacks.length % 5 === 0) speed++;
+            console.log(current.position, current.length);
+          }
+        } else {
+          display.innerText = "";
+          isRunning = true;
+          startGame();
+        }
+      }
+    });
+
+    window.addEventListener("touchstart", (e) => {
+      if (isRunning) {
+        if (!isPressed) {
+          isPressed = true;
+          console.log(current.position, current.length);
+          if (stacks.length % 5 === 0) speed++;
+        }
+      } else {
+        display.innerText = "";
+        isRunning = true;
+        startGame();
+      }
+    })
+
+    function startGame() {
+      drawStacks();
+      requestAnimationFrame(animation);
+    }
+
+    function resetGame() {
+      cancelAnimationFrame(animation);
+      current.position = 0;
+      current.length = 250;
+      direction = 0;
+      downPosition = 300;
+      stacks = [new Stack(125, 250, 1)];
+      isRunning = false;
+      isPressed = false;
+    }
+
+    var speed = 3;
+
+    var direction = 0; // 0: toRight, 1: toLeft
+    var downPosition = 300;
+    function animation() {
+      if (!isRunning) return;
+      play_ctx.clearRect(0, 0, 500, 800);
+      play_ctx.fillStyle = palette[(stacks.length + 1) % palette.length];
+      if (isPressed) {
+        if (downPosition < 500 - 30) {
+          play_ctx.fillRect(current.position, downPosition, current.length, 30);
+          downPosition += 1;
+        } else {
+          const before = stacks[stacks.length - 1];
+          const position = current.position < before.position ? before.position : current.position;
+          const length = current.length - Math.abs(current.position - before.position);
+          if (length > 0) {
+            play_ctx.fillRect(position, 500 - 30, length, 30);
+            stacks.push(new Stack(position, length, stacks.length + 1));
+            downPosition = 300;
+            current.length = length;
+            current.position = 0;
+            drawStacks();
+            isPressed = false;
+          } else {
+            resetGame();
+            display.innerText = "Press the \"space\" to restart.";
+          }
+        }
+      } else {
+        play_ctx.fillRect(current.position, 300, current.length, 30);
+        if (direction === 0) {
+          if (current.position + current.length / 2 < 500) {
+            current.position += speed;
+          } else {
+            direction = 1;
+            current.position -= speed;
+          }
+        } else {
+          if (current.position > current.length / -2) {
+            current.position -= speed;
+          } else {
+            direction = 0;
+            current.pisition += speed;
+          }
+        }
+      }
+      requestAnimationFrame(animation);
+    }
+
+    function drawStacks() {
+      score.innerText = "SCORE: " + stacks.length;
+      stack_ctx.clearRect(0, 0, 500, 800);
+      stacks.forEach((stack) => {
+        stack_ctx.fillStyle = palette[stack.floor % palette.length];
+        stack_ctx.fillRect(stack.position, 500 + (stacks.length - stack.floor) * 30, stack.length, 30);
+      });
+      if (500 + stacks.length * 30 < 800) {
+        stack_ctx.fillStyle = "darkgrey";
+        stack_ctx.fillRect(0, 500 + (stacks.length) * 30, 500, 300);
+      }
+    }
+
+  </script>
+</body>
+
+</html>
