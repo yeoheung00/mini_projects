@@ -138,7 +138,7 @@
       if (isPressed) {
         if (downPosition < 500 - 30) {
           play_ctx.fillRect(current.position, downPosition, current.length, 30);
-          downPosition += 1;
+          downPosition += 10;
         } else {
           const before = stacks[stacks.length - 1];
           const position = current.position < before.position ? before.position : current.position;
