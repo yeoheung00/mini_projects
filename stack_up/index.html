@@ -6,12 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Stack UP!</title>
   <style>
+    body{
+      background-color: gray;
+      margin: 0;
+      padding: 0;
+    }
     #container {
       width: 500px;
       height: 800px;
       overflow: hidden;
-      position: relative;
-      background-color: gray;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: beige;
+      border-radius: 16px;
     }
 
     canvas {
@@ -185,7 +194,7 @@
         stack_ctx.fillRect(stack.position, 500 + (stacks.length - stack.floor) * 30, stack.length, 30);
       });
       if (500 + stacks.length * 30 < 800) {
-        stack_ctx.fillStyle = "darkgrey";
+        stack_ctx.fillStyle = "#ffaa80";
         stack_ctx.fillRect(0, 500 + (stacks.length) * 30, 500, 300);
       }
     }
