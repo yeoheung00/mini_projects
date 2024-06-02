@@ -67,7 +67,7 @@
     <canvas id="play_canvas" width="500px" height="800px"></canvas>
     <canvas id="stack_canvas" width="500px" height="800px"></canvas>
     <h1 id="score"></h1>
-    <p id="display">Press the "space" to start</p>
+    <p id="display">Press "space" to start</p>
   </div>
   <script>
     class Stack {
@@ -196,7 +196,7 @@
             score.innerText = "SCORE: " + stacks.length;
           } else {
             endGame();
-            display.innerText = "Press the \"space\" to restart.";
+            display.innerText = "Press \"space\" to re-start.";
           }
         }
       } else {
