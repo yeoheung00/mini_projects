@@ -116,7 +116,7 @@
       if (isRunning) {
         if (!isPressed) {
           isPressed = true;
-          console.log(current.position, current.length);
+          // console.log(current.position, current.length);
           if (stacks.length % 5 === 0) speed++;
         }
       } else {
@@ -152,13 +152,14 @@
 
       var resize_height = Math.floor(400 / stacks.length);
       if (resize_height > 30) resize_height = 30;
-      const resize_ratio = Math.round(resize_height / 30);
+      const resize_ratio = resize_height / 30;
       //if (resize_height > 30) return;
       stack_ctx.clearRect(0, 0, 500, 800);
       stack_ctx.fillStyle = "#ffaa80";
       stack_ctx.fillRect(0, 600, 500, 200);
       const startPoint = (500 - 500 * resize_ratio) / 2;
       const heightPoint = 600 - stacks.length * resize_height;
+      // console.log(`rh: ${resize_height}, rr: ${resize_ratio}, sp: ${startPoint}`);
       stacks.forEach((stack) => {
         stack_ctx.fillStyle = palette[(stack.floor % palette.length)]
         stack_ctx.fillRect(startPoint + stack.position * resize_ratio, heightPoint + resize_height * stacks.length - stack.floor * resize_height, stack.length * resize_ratio, resize_height);
