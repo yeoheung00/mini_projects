@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>지뢰제거작전</title>
+    <style>
+        @font-face {
+            font-family: 'Sonpyeonji';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/naverfont_05@1.0/Handletter.woff') format('woff');
+            font-weight: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'NexenTire';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/NEXEN_TIRE_Regular.woff') format('woff');
+            font-weight: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'NexenTire';
+            src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/NEXEN_TIRE_Bold.woff') format('woff');
+            font-weight: 700;
+            font-display: swap;
+        }
+
+        [type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        /* 그 외(Chrome, Safari, Edge...)의 브라우저용 사용자 정의 스타일 */
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        html {
+            background-color: gray;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        body {
+            min-width: 700px;
+            min-height: calc(100vh - 48px);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            padding: 16px;
+            background-color: white;
+        }
+
+        td,
+        th {
+            width: 100px;
+            height: 20px;
+            padding: 0;
+            text-align: center;
+            font-size: small;
+        }
+
+        th {
+            background-color: silver;
+        }
+
+        .element_row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .element_mine {
+            width: 32px;
+            height: 32px;
+            color: black;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body oncontextmenu="return false;">
+    <div id="title" style="
+        display: flex;
+        width: 100%;
+        max-width: 900px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        gap: 32px;">
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <td>등록번호</td>
+                <td>26-1</td>
+            </tr>
+            <tr>
+                <td>등록일자</td>
+                <td>'26.03.08.</td>
+            </tr>
+            <tr>
+                <td>결재일자</td>
+                <td>'26.03.08.</td>
+            </tr>
+            <tr>
+                <td>공개구분</td>
+                <td>공개</td>
+            </tr>
+            <tr>
+                <td>언론홍보</td>
+                <td>알음알음</td>
+            </tr>
+        </table>
+        <h1 style="
+            border-top: 2px solid blue;
+            border-bottom: 4px solid blue;
+            padding: 8px 0 2px 0;
+            width: 250px;
+            height: 40px;
+            text-align: center;
+            font-family: 'NexenTire'; ">지뢰제거작전</h1>
+
+        <table border="1" style="border-collapse: collapse;">
+            <tr>
+                <td>기안</td>
+                <td>결재</td>
+            </tr>
+            <tr>
+                <td style="height: 83px; font-size: x-large; font-family: 'Sonpyeonji';">중위</br>민경원</td>
+                <td style="height: 83px; font-size: x-large; font-family: 'Sonpyeonji';">대령</br>김윤근</td>
+            </tr>
+        </table>
+    </div>
+    <div id="control" style="
+        width: 100%;
+        margin-top: 16px;">
+        <h2 style="color: blue;">■ 상황</h2>
+        <table border="1" style="
+            border-collapse: collapse;
+            border-right: 2px solid black;
+            border-bottom: 2px solid black;">
+            <tr>
+                <th></th>
+                <th>가로</th>
+                <th>세로</th>
+                <th>지뢰 수</th>
+                <th rowspan="4"><button onclick="resetGame()"
+                        style="width: 100%; height: 100%; border: none;">새로시작</button></th>
+            </tr>
+            <tr>
+                <th>사용자 설정</th>
+                <td><input id="input_column" type="number" value="10" style="border: none; text-align: center;" /></td>
+                <td><input id="input_row" type="number" value="10" style="border: none; text-align: center;" /></td>
+                <td><input id="input_mine" type="number" value="20" style="border: none; text-align: center;" /></td>
+            </tr>
+            <tr>
+                <th>현황</th>
+                <td id="display_column">10</td>
+                <td id="display_row">10</td>
+                <td id="display_mine">0/20</td>
+            </tr>
+            <tr>
+                <th>상태창</th>
+                <td id="display_time" colspan="3">00:00</td>
+            </tr>
+        </table>
+        <p style="color: green; font-size: small;">* 사용자 설정 칸의 값을 수정 후 '새로시작' 버튼을 클릭해 새 게임을 세팅할 수 있습니다.</p>
+        <h2 style="color: blue;">■ 실시</h2>
+    </div>
+    <div id="field">
+
+    </div>
+    <script>
+        var column_set = 10;
+        var row_set = 10;
+        var mine_set = 20;
+
+        var isStarted = false;
+        var progress = 0;
+        var reveal_count = 0;
+        const display_column = document.getElementById("display_column");
+        const display_row = document.getElementById("display_row");
+        const display_mine = document.getElementById("display_mine");
+        const display_time = document.getElementById("display_time");
+        const field = document.getElementById("field");
+
+        var position = null;
+
+        class Room {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.element = document.createElement("button");
+                this.element.setAttribute("class", "element_mine");
+                this.element.addEventListener('mousedown', (event) => {
+                    if (!isStarted) {
+                        isStarted = true;
+                        startTime = Date.now();
+                        expectedTime = Date.now() + INTERVAL;
+                        setTimeout(timerFunction, INTERVAL);
+                    }
+                    if (event.button == 2 || event.which == 3) {
+                        this.flag();
+                    }
+                    else if (event.button == 0 || event.which == 1) {
+                        this.reveal();
+                    }
+                });
+                //this.element.addEventListener("mouseover", () => {position=this.element;console.log(position);});
+                this.type = "safe";
+                this._isRevealed = false;
+                this._isFlagged = false;
+                this.value = 0;
+            }
+            appendTo(parent) { parent.appendChild(this.element); }
+            getType() { return this.type; }
+            setType(type) { this.type = type; }
+            get isRevealed() { return this._isRevealed; }
+            reveal() {
+                reveal_count++;
+                this._isRevealed = true;
+                this.element.setAttribute("disabled", "disabled");
+                this.element.setAttribute("style", "background-color: grey")
+                if (this.type == "mine") {
+                    this.element.setAttribute("style", "background-color: red");
+                    endGame();
+                } else {
+                    this.element.innerText = this.value;
+                    if (this.value == 0) {
+                        for (var y = -1; y < 2; y++) {
+                            for (var x = -1; x < 2; x++) {
+                                var xx = this.x + x;
+                                var yy = this.y + y;
+                                if (xx < 0 || xx > column_set - 1 || yy < 0 || yy > row_set - 1 || (x == 0 && y == 0)) continue;
+                                targetData = fieldData[yy][xx];
+                                if (!targetData.isRevealed) targetData.reveal();
+                            }
+                        }
+                    }
+                }
+
+                if (reveal_count + progress == column_set * row_set && progress == mine_set) {
+                    winGame();
+                }
+                //this.element.innerText = this.type == "mine" ? "*" : value;
+            }
+            get isFlagged() { return this._isFlagged }
+            flag() {
+                if (!this._isFlagged) {
+                    progress++;
+                    this.element.innerText = "F";
+                } else {
+                    progress--;
+                    this.element.innerText = "";
+                }
+                display_mine.innerText = progress + "/" + mine_set;
+                this._isFlagged = this._isFlagged ? false : true;
+                this.element.innerText = this._isFlagged ? "🚩" : "";
+            }
+            getValue() { return this.value; }
+            setValue(value) { this.value = value; }
+            end() {
+                isStarted = false;
+                display_time.innerText = "지뢰 제거 실패" + String(Math.floor(sec / 60)).padStart(2, '0') + ":" + String(sec % 60).padStart(2, '0');
+                if (this.type == "mine") this.element.innerText = "💣";
+                this.element.setAttribute("disabled", "disabled");
+            }
+        }
+
+        function resetGame() {
+            console.log("Starting Game..");
+            isStarted = false;
+            progress = 0;
+            column_set = document.getElementById("input_column").value;
+            row_set = document.getElementById("input_row").value;
+            mine_set = document.getElementById("input_mine").value;
+            display_column.innerText = column_set;
+            display_row.innerText = row_set;
+            display_mine.innerText = "0/" + mine_set;
+            makeField();
+        }
+
+        function endGame() {
+            fieldData.forEach(row => {
+                row.forEach(column => {
+                    column.end();
+                })
+            });
+        }
+
+        function winGame() {
+            isStarted = false;
+            display_time.innerText = "모든 지뢰 제거 성공! " + String(Math.floor(sec / 60)).padStart(2, '0') + ":" + String(sec % 60).padStart(2, '0');
+            endGame();
+        }
+
+        var fieldData = []
+        function makeField() {
+            sec = 0;
+            display_time.innerText = "00:00";
+            fieldData = [];
+            var child = document.querySelectorAll(".element_row");
+            child.forEach(element => {
+                field.removeChild(element);
+            });
+            for (var y = 0; y < row_set; y++) {
+                var line = [];
+                var element_row = document.createElement("div");
+                element_row.className = "element_row";
+                for (var x = 0; x < column_set; x++) {
+                    var room = new Room(x, y);
+                    room.appendTo(element_row);
+                    line.push(room);
+                }
+                field.appendChild(element_row);
+                fieldData.push(line);
+            }
+            var mineData = [];
+            for (var i = 0; i < mine_set; i++) {
+                var ranX = Math.floor(Math.random() * column_set);
+                var ranY = Math.floor(Math.random() * row_set);
+                var selectedRoom = fieldData[ranY][ranX];
+                if (selectedRoom.getType() == "mine") {
+                    i--;
+                    continue;
+                } else {
+                    selectedRoom.setType("mine");
+                    for (var y = -1; y < 2; y++) {
+                        for (var x = -1; x < 2; x++) {
+                            var xx = ranX + x;
+                            var yy = ranY + y;
+                            if (xx < 0 || xx > column_set - 1 || yy < 0 || yy > row_set - 1 || (x == 0 && y == 0)) continue;
+                            targetData = fieldData[yy][xx];
+                            var before = targetData.getValue();
+                            targetData.setValue(targetData.getValue() + 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        const INTERVAL = 1000;
+        var startTime = Date.now();
+        var expectedTime = Date.now() + INTERVAL;
+        var sec = 0;
+
+        function timerFunction() {
+            if (!isStarted) return;
+            sec++;
+            display_time.innerText = String(Math.floor(sec / 60)).padStart(2, '0') + ":" + String(sec % 60).padStart(2, '0');
+            const drift = Date.now() - expectedTime;
+            expectedTime += INTERVAL;
+            if (isStarted) setTimeout(timerFunction, Math.max(0, INTERVAL - drift));
+        }
+
+        resetGame();
+    </script>
+</body>
+
+</html>
