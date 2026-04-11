@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="style.css" rel="stylesheet" />
+</head>
+
+<body oncontextmenu="return false">
+    <section id="setting">
+        <div id="diff">
+            <button onclick="setDiff(0)">초급</button>
+            <button onclick="setDiff(1)">중급</button>
+            <button onclick="setDiff(2)">고급</button>
+            <button onclick="setDiff(3)">커스텀</button>
+        </div>
+        <div class="inputs">
+            <label for="ip_column">가로</label>
+            <input id="ip_column" type="number" value="9" disabled/>
+        </div>
+        <div class="inputs">
+            <label for="ip_row">세로</label>
+            <input id="ip_row" type="number" value="9" disabled/>
+        </div>
+        <div class="inputs">
+            <label for="ip_mine">지뢰</label>
+            <input id="ip_mine" type="number" value="10" disabled/>
+        </div>
+        <div id="submit">
+            <button id="bt_cancel" onclick="popup(false)">취소</button>
+            <button id="bt_submit" onclick="apply()">확인</button>
+        </div>
+    </section>
+    <header>
+        <h1 id="title">지뢰찾기</h1>
+        <div id="control">
+            <div id="information">
+                <img class="icon" src="src/time.svg" alt="time" />
+                <p id="dp_time">00:00</p>
+                <div id="divider"></div>
+                <img class="icon" src="src/mine.svg" alt="mine" />
+                <p id="dp_mine">0/10</p>
+            </div>
+            <div id="divider"></div>
+            <button id="bt_regame" onclick="refresh()"><img class="icon" src="src/regame.svg" alt="regame" /></button>
+            <button id="bt_setting" onclick="popup(true)"><img class="icon" src="src/setting.svg" alt="setting" /></button>
+        </div>
+    </header>
+    <section id="play_section">
+        <div id="pad"></div>
+        <div id="field"></div>
+    </section>
+
+
+    <script src="minesweeper.js"></script>
+</body>
+
+</html>

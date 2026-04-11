@@ -1,0 +1,240 @@
+* {
+    margin: 0;
+    padding: 0;
+    color: var(--text);
+}
+
+:root {
+  --background: #eaf0eb;
+  --primary: #56C163;
+  --sub-primary: #A4E9AC;
+  --caution: #ff0000;
+  --surface: #ffffff;
+  --surface1: #f7f7f7;
+  --surface2: #e7e7e7;
+  --text: #383838;
+  --disabled: #c0c0c0;
+}
+
+html{
+    width: 100%;
+    height: 100%;
+}
+
+body{
+    background-color: var(--background);
+    width: 100%;
+    height: 100%;
+}
+
+header {
+    position: fixed;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--surface);
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 800px;
+    height: 44px;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    padding-right: 4px;
+    border-radius: 12px;
+}
+
+#title{
+    font-size: x-large;
+}
+
+#control{
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+}
+
+#information{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+}
+
+#information p{
+    font-size: x-large;
+    font-family: monospace;
+}
+
+.icon{
+    width: 24px;
+    height: 24px;
+}
+
+#divider{
+    width: 2px;
+    height: 24px;
+    background-color: var(--surface2);
+    border-radius: 1px;
+}
+
+header button{
+    background-color: var(--surface);
+    transition: background-color 0.3s ease;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    padding: 6px;
+}
+
+#bt_regame:hover, #bt_setting:hover{
+    background-color: var(--surface2);
+}
+
+
+#setting{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--surface);
+    border-radius: 16px;
+    padding: 8px;
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#diff{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+#diff button{
+    width: 80px;
+    height: 40px;
+    background-color: var(--surface);
+    transition: background-color 0.3s ease;
+    border: none;
+    border-radius: 8px;
+    font-size: medium;
+}
+
+#diff button:hover{
+    background-color: var(--surface1);
+}
+
+.inputs{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: calc(100% - 4px);
+    border: var(--surface2) 2px solid;
+    border-radius: 8px;
+    background-color: var(--surface2);
+}
+
+.inputs label{
+    width: 30%;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    font-size: medium;
+    background-color: var(--surface2);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    
+}
+
+.inputs input{
+    width: 70%;
+    height: 24px;
+    background-color: var(--surface1);
+    border: none;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    text-align: right;
+    padding-right: 4px;
+    color: var(--text);
+}
+
+.inputs input:disabled {
+    color: var(--disabled);
+}
+
+#submit{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8px;
+    height: 40px;
+}
+
+#submit button{
+    border: none;
+    border-radius: 8px;
+    font-size: medium;
+}
+
+#bt_cancel{
+    background-color: var(--surface);
+    transition: background-color 0.3s ease;
+}
+
+#bt_cancel:hover{
+    background-color: var(--surface1);
+}
+
+#bt_submit{
+    background-color: var(--sub-primary);
+    transition: background-color 0.3s ease;
+}
+
+#bt_submit:hover{
+    background-color: var(--primary);
+}
+
+#play_section{
+    width: 100%;
+    height: 100%;
+}
+
+#pad{
+    width: 100%;
+    height: 60px;
+}
+
+#field{
+    width: fit-content;
+    height: fit-content;
+    min-width: 100%;
+    min-height: calc(100% - 60px);
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    overflow: scroll;
+}
+
+.mine_row{
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+
+.element_mine{
+    width: 36px;
+    height: 36px;
+    background-color: var(--primary);
+    border-radius: 4px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
