@@ -17,6 +17,7 @@ let mine = 10;
 let revealed = 0;
 let flagged = 0;
 let isStarted = false;
+let isEnded = false;
 let fieldData = [];
 let timer = 0;
 
@@ -101,11 +102,11 @@ class Room {
 
     get isRevealed() { return this._isRevealed; }
     reveal() {
+        if (this.isRevealed || this.isFlagged || isEnded) return;
         if (!isStarted) {
             isStarted = true;
             timerStart();
         }
-        if (this.isRevealed || this.isFlagged) return;
         this._isRevealed = true;
         if (this.type === "safe") {
             this.element.style.backgroundColor = "var(--sub-primary)"
@@ -122,7 +123,7 @@ class Room {
 
     get isFlagged() { return this._isFlagged }
     flag() {
-        if (this.isRevealed) return;
+        if (this.isRevealed || isEnded) return;
         this._isFlagged = !this._isFlagged;
         this.isFlagged ? flagged++ : flagged--;
         this.element.innerHTML = this.isFlagged ? "<img src='src/flag.svg' alt='flag'/>" : "";
@@ -150,6 +151,7 @@ function openNeighbor(x, y) {
 
 function gameOver() {
     isStarted = false;
+    isEnded = true;
     console.log("Game Over!!");
     TITLE.innerText = "게임 오버!!";
     fieldData.forEach(row => {
@@ -164,6 +166,7 @@ function gameOver() {
 
 function gameClear() {
     isStarted = false;
+    isEnded = true;
     console.log("Game Clear!!");
     TITLE.innerText = "게임 클리어!!";
 }
@@ -191,6 +194,7 @@ function timerFunc() {
 function refresh() {
     TITLE.innerText = "지뢰찾기";
     isStarted = false;
+    isEnded = false;
     revealed = 0;
     flagged = 0;
     fieldData = [];
