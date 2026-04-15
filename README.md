@@ -8,9 +8,9 @@
 
 | Project | Preview | Description | Status |
 | :--- | :---: | :--- | :---: |
-| **Stack Up** | [🕹️ Play](https://yeoheung00.github.io/mini_projects/stack_up/) | 타이밍에 맞춰 블록을 높이 쌓아 올리는 리듬 게임입니다. | <span style="color: green;">배포완료</span> |
+| **Stack Up** | [🕹️ Play](https://yeoheung00.github.io/mini_projects/stack_up/) | 블럭을 가능한 높게 쌓는 게임입니다. | <span style="color: green;">배포완료</span> |
 | **Mine Sweeper** | [🕹️ Play](https://yeoheung00.github.io/mini_projects/minesweeper/) | 클래식한 지뢰찾기입니다. | <span style="color: green;">배포완료</span> |
-| **Snake Game** | [🕹️ Play](https://yeoheung00.github.io/mini_projects/snake_game/) | 클래식한 지뢰찾기입니다. | <span style="color: yellow;">개발중</span> |
+| **Snake Game** | [🕹️ Play](https://yeoheung00.github.io/mini_projects/snake_game/) | 먹이를 먹을 수록 자라납니다. | <span style="color: yellow;">개발중</span> |
 
 ---
 <p align="center">
