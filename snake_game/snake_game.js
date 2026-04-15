@@ -44,7 +44,7 @@ function timerFunc() {
 }
 
 function step() {
-    let [x, y] = snake[0].split(":");
+    let [x, y] = snake[0].split(":").map(Number);
     if (direction === "N") y--;
     else if (direction === "E") x++;
     else if (direction === "S") y++;
@@ -93,16 +93,31 @@ function drawSnake() {
     ctx.clearRect(0, 0, field.width, field.height);
     drawField();
     drawFoods();
-    snake.forEach(data => {
-        const [x, y] = data.split(":");
-        ctx.fillStyle = "#00ff00";
+    const inner_offset = Math.floor(offset * 0.3 / 2);
+    snake.forEach((data, index) => {
+        const [x, y] = data.split(":").map(Number);
+        ctx.fillStyle = "#006600";
         ctx.fillRect(x * offset, y * offset, offset, offset);
+        ctx.fillStyle = "#00ff00";
+        ctx.fillRect(x * offset + inner_offset, y * offset + inner_offset, offset - inner_offset * 2, offset - inner_offset * 2);
+        if (index !== 0) {
+            const [x, y] = data.split(":").map(Number);
+            const [xx, yy] = snake[index - 1].split(":").map(Number);
+            if (xx === x) {
+                if (yy > y) ctx.fillRect(x * offset + inner_offset, y * offset + inner_offset + offset / 2, offset - inner_offset * 2, offset - inner_offset * 2);
+                else ctx.fillRect(x * offset + inner_offset, y * offset + inner_offset - offset / 2, offset - inner_offset * 2, offset - inner_offset * 2);
+            }
+            else{
+                if (xx > x) ctx.fillRect(x * offset + inner_offset + offset / 2, y * offset + inner_offset, offset - inner_offset * 2, offset - inner_offset * 2);
+                else ctx.fillRect(x * offset + inner_offset - offset / 2, y * offset + inner_offset, offset - inner_offset * 2, offset - inner_offset * 2);
+            }
+        }
     });
 }
 
 function drawFoods() {
     foods.forEach(food => {
-        const [x, y] = food.split(":");
+        const [x, y] = food.split(":").map(Number);
         ctx.fillStyle = "#ff0000";
         ctx.beginPath();
         ctx.arc(x * offset + offset / 2, y * offset + offset / 2, offset * 0.4, 0, 2 * Math.PI);

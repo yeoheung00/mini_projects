@@ -44,34 +44,36 @@ canvas{
 
 div{
     position: relative;
-    height: 270px;
+    height: 152px;
     text-align: center;
+    font-size: x-small;
 }
 
 button{
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
+    font-size: x-large;
 }
 
 button:first-child{
-    top: 30px;
+    top: 20px;
     left: 50%;
-    transform: translateX(-40px);
+    transform: translateX(-32px);
 }
 
 button:nth-child(2){
-    top: 110px;
+    top: 54px;
     left: 50%;
-    transform: translateX(40px);
+    transform: translateX(36px);
 }
 button:nth-child(3){
-    top: 190px;
+    top: 88px;
     left: 50%;
-    transform: translateX(-40px);
+    transform: translateX(-32px);
 }
 button:nth-child(4){
-    top: 110px;
+    top: 54px;
     left: 50%;
-    transform: translateX(-120px);
+    transform: translateX(-100px);
 }
