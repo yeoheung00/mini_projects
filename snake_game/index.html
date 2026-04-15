@@ -7,7 +7,23 @@
     <title>스네이크 게임</title>
     <link href="style.css" rel="stylesheet" />
 </head>
+
 <body>
+    <main>
+        <header>
+            <h1>스네이크 게임</h1>
+            <span>점수: 0</span>
+        </header>
+        <canvas width="510" height="510"></canvas>
+        <div>
+            버튼 또는 키보드의 화살표로 방향을 조정하십시오.
+            <button onclick="document.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowUp'}))">상</button>
+            <button onclick="document.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowRight'}))">우</button>
+            <button onclick="document.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowDown'}))">하</button>
+            <button onclick="document.dispatchEvent(new KeyboardEvent('keydown', {key: 'ArrowLeft'}))">좌</button>
+        </div>
+    </main>
     <script src="snake_game.js"></script>
 </body>
+
 </html>

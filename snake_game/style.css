@@ -1,0 +1,72 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html, body{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #3f3f3f;
+}
+
+main{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    padding: 0 8px 8px 8px;
+}
+
+header{
+    display: flex;
+    direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+}
+
+h1, span{
+    font-size: x-large;
+}
+
+canvas{
+    width: 500px;
+    height: 500px;
+}
+
+div{
+    position: relative;
+    height: 180px;
+    text-align: center;
+}
+
+button{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+}
+
+button:first-child{
+    top: 30px;
+    left: 50%;
+    transform: translateX(-25px);
+}
+
+button:nth-child(2){
+    top: 80px;
+    left: 50%;
+    transform: translateX(25px);
+}
+button:nth-child(3){
+    top: 130px;
+    left: 50%;
+    transform: translateX(-25px);
+}
+button:nth-child(4){
+    top: 80px;
+    left: 50%;
+    transform: translateX(-75px);
+}
