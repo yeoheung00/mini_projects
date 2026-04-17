@@ -20,7 +20,7 @@ class Block {
             this.rotate();
             return;
         }
-        if (this.moveable(dx, dy)) {
+        if (this.moveable(dx, dy, this.shape)) {
             this.x += dx;
             this.y += dy;
             this.draw();
@@ -28,8 +28,8 @@ class Block {
             this.fixPosition();
         }
     }
-    moveable(dx, dy) {
-        return this.shape.every((line, y) => line.every((cell, x) => cell === 0 || (this.x + x + dx >= 0 && this.x + x + dx < width && this.y + y + dy >= 0 && this.y + y + dy < height && field[this.y + y + dy][this.x + x + dx] === 0)));
+    moveable(dx, dy, shape) {
+        return shape.every((line, y) => line.every((cell, x) => cell === 0 || (this.x + x + dx >= 0 && this.x + x + dx < width && this.y + y + dy >= 0 && this.y + y + dy < height && field[this.y + y + dy][this.x + x + dx] === 0)));
     }
     rotate() {
         console.log("rotate");
@@ -40,10 +40,33 @@ class Block {
                 temp[x][size - 1 - y] = this.shape[y][x];
             }
         }
-        if(this.x<0) this.x++;
-        else if(this.x+temp.length > width) this.x--;
-        this.shape = temp;
+        if(this.adjustable(temp)) this.shape = temp;
         this.draw();
+    }
+    adjustable(shape) {
+        if (shape.length === 3) {
+            const offset = [{dx: 0, dy: 0}, { dx: 1, dy: 0 }, { dx: -1, dy: 0 }, { dx: 0, dy: -1 }];
+            for (let i = 0; i < offset.length; i++) {
+                const data = offset[i];
+                if (this.moveable(data.dx, data.dy, shape)) {
+                    this.x += data.dx;
+                    this.y += data.dy;
+                    return true;
+                }
+            }
+        }
+        else if (shape.length === 4) {
+            const offset = [{dx: 0, dy: 0}, { dx: 1, dy: 0 }, { dx: 2, dy: 0 }, { dx: -1, dy: 0 }, { dx: -2, dy: 0 }, { dx: 0, dy: -1 }, { dx: 0, dy: -2 }];
+            for (let i = 0; i < offset.length; i++) {
+                const data = offset[i];
+                if (this.moveable(data.dx, data.dy, shape)) {
+                    this.x += data.dx;
+                    this.y += data.dy;
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     fixPosition() {
         this.shape.forEach((line, y) => {
@@ -64,14 +87,13 @@ class Block {
         }
     }
     draw() {
-        ctx.clearRect(0, 0, width * cell_size, height * cell_size);
+        drawField();
         this.shape.forEach((line, y) => {
             line.forEach((cell, x) => {
                 ctx.fillStyle = palette[cell];
                 if (cell > 0) ctx.fillRect((this.x + x) * cell_size, (this.y + y) * cell_size, cell_size, cell_size);
             });
         });
-        drawField();
     }
 }
 
@@ -81,7 +103,7 @@ const width = 10;
 const height = 22;
 const cell_size = canvas.width / width;
 const startPoint = [{ x: 4, y: 0 }, { x: 3, y: 1 }, { x: 3, y: 0 }, { x: 3, y: 0 }, { x: 3, y: 0 }, { x: 3, y: 0 }];
-const palette = ["", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff", "#00ffff", "#000000"];
+const palette = ["", "#ffff00", "#00ffff", "#ff00ff", "#0000ff", "#ff9900", "#ff0000", "#00ff00"];
 const shape = [[
     [1, 1],
     [1, 1]
@@ -135,13 +157,14 @@ function timerStart() {
 
 
 function drawField() {
-    //ctx.fillStyle = "#c4c4c4";
+    ctx.clearRect(0, 0, width * cell_size, height * cell_size);
+    ctx.fillStyle = "#c4c4c4";
     for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-            /*if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
+            if ((y % 2 === 0 && x % 2 === 0) || (y % 2 === 1 && x % 2 === 1)) {
                 ctx.fillStyle = "#c4c4c4";
                 ctx.fillRect(x * cell_size, y * cell_size, cell_size, cell_size);
-            }*/
+            }
             if (field[y][x] > 0) {
                 ctx.fillStyle = palette[field[y][x]];
                 ctx.fillRect(x * cell_size, y * cell_size, cell_size, cell_size);
