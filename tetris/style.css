@@ -1,0 +1,12 @@
+body{
+    display: flex;
+    flex-direction: row;
+}
+
+#field{
+    background-color: #c4c4c4;
+}
+div{
+    display: flex;
+    flex-direction: column;
+}
