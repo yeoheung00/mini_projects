@@ -20,12 +20,20 @@ class Block {
             this.rotate();
             return;
         }
+        else if (direction === " ") {
+            this.drop();
+        }
         if (this.moveable(dx, dy, this.shape)) {
             this.x += dx;
             this.y += dy;
             drawField();
         } else if (direction === "ArrowDown") {
             this.fixPosition();
+        }
+    }
+    drop(){
+        while(this.moveable(0, -1, this.shape)){
+            this.move("ArrowDown");
         }
     }
     moveable(dx, dy, shape) {
@@ -41,7 +49,7 @@ class Block {
             }
         }
         if (this.adjustable(temp)) this.shape = temp;
-        this.draw();
+        drawField();
     }
     adjustable(shape) {
         if (shape.length === 3) {
